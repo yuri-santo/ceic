@@ -1,12 +1,14 @@
+// components/CircularMascotNav.jsx
 "use client";
 import Image from "next/image";
 
+/* ORDEM da sua logo (topo → horário) #metodo #contato*/
 export const MASCOTS_MAP = [
-  { key: "amarelo",  src: "/mascotes/logo_amarelo.jpg",  label: "Início",      color: "yellow", target: "#inicio"    },
-  { key: "verde",    src: "/mascotes/logo_verde.jpg",    label: "Metodologia", color: "green",  target: "#metodo"    },
-  { key: "vermelho", src: "/mascotes/logo_vermelho.jpg", label: "Matrículas",  color: "red",    target: "#contato"   },
-  { key: "laranja",  src: "/mascotes/logo_laranja.jpg",  label: "Sobre",       color: "orange", target: "#sobre"     },
-  { key: "azul",     src: "/mascotes/logo_azul.jpg",     label: "Estrutura",   color: "blue",   target: "#estrutura" }
+  { key: "amarelo",  src: "/mascotes/logo_amarelo.jpg",  label: "Início",      color: "yellow", target: "#inicio"         },
+  { key: "verde",    src: "/mascotes/logo_verde.jpg",    label: "Sobre", color: "green",  target: "#sobre"                },
+  { key: "vermelho", src: "/mascotes/logo_vermelho.jpg", label: "Metodologia",  color: "red",    target: "#metodo"        },
+  { key: "laranja",  src: "/mascotes/logo_laranja.jpg",  label: "Estrutura",       color: "orange", target: "#estrutura"  },
+  { key: "azul",     src: "/mascotes/logo_azul.jpg",     label: "Cantato",   color: "blue",   target: "#contato"          }
 ];
 
 export default function CircularMascotNav(){

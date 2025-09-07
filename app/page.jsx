@@ -6,9 +6,10 @@ import Image from "next/image";
 import CircularMascotNav from "../components/CircularMascotNav";
 import LeadStickyBar from "../components/LeadStickyBar";
 import EffectsClient from "../components/EffectsClient";
-import WhatsAppWidget from "../components/WhatsAppWidget"; // se já existir; senão remova o import
+import WhatsAppWidget from "../components/WhatsAppWidget";
+import ManualCarousel from "../components/ManualCarousel";
 
-// ícones simples (SVG)
+// ícone simples (check) para micro item
 const IconCheck  =(p)=>(<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.5z"/></svg>);
 
 export default function Page(){
@@ -22,7 +23,14 @@ export default function Page(){
       <header className="hoverable">
         <div className="container nav">
           <div className="brand">
-            <Image src="/logo.jpg" alt="Logo Centro de Educação Infantil Cirandinha" width={44} height={44}/>
+            <Image
+              src="/logo.jpg"
+              alt="Logo Centro de Educação Infantil Cirandinha"
+              width={44}
+              height={44}
+              /* evita warning do Next/Image quando CSS altera uma dimensão */
+              style={{ borderRadius: 12, height: "auto", width: "auto" }}
+            />
             <div>
               <h1>Centro de Educação Infantil Cirandinha</h1>
               <small>45 anos guiando pelo melhor caminho</small>
@@ -36,11 +44,13 @@ export default function Page(){
               <li><a href="#metodo" className="hoverable">Metodologia</a></li>
               <li><a href="#estrutura" className="hoverable">Estrutura</a></li>
               <li><a href="#contato" className="hoverable">Matrículas</a></li>
-              <li><a href="#alunos" className="hoverable">Alunos</a></li>
             </ul>
           </nav>
 
-          {/* burger (mobile) */}
+          {/* telefone (mobile) + burger */}
+          <div className="top-phone">
+            <a href="tel:+553100000000">Ligar: (31) 0000-0000</a>
+          </div>
           <button className="burger" aria-label="Abrir menu" onClick={()=>setMenuOpen(s=>!s)}><span/></button>
         </div>
 
@@ -51,7 +61,6 @@ export default function Page(){
             <a href="#metodo" onClick={()=>setMenuOpen(false)}>Metodologia</a>
             <a href="#estrutura" onClick={()=>setMenuOpen(false)}>Estrutura</a>
             <a href="#contato" onClick={()=>setMenuOpen(false)}>Matrículas</a>
-            <a href="#" onClick={()=>setMenuOpen(false)}>Alunos</a>
           </div>
         </nav>
       </header>
@@ -71,9 +80,8 @@ export default function Page(){
                 <li><span className="li-dot" /> Comunicação próxima com devolutivas</li>
               </ul>
               <div className="cta">
-                <a href="#contato" className="btn btn-primary hoverable" data-confetti>Ver horários e valores (PDF)</a>
+                <a href="#contato" className="btn btn-primary hoverable" data-confetti>Ver horários (PDF)</a>
                 <a href="#visita" className="btn btn-ghost hoverable">Agendar visita guiada</a>
-                <a href="https://wa.me/553100000000?text=Olá!%20Quero%20falar%20com%20a%20Coordenação" target="_blank" rel="noopener" className="btn btn-ghost hoverable">Falar com a Coordenação</a>
               </div>
               <p className="note-muted"><IconCheck className="inline-ico"/> Vagas limitadas por turma. Retorno em até 1 dia útil.</p>
             </div>
@@ -93,6 +101,7 @@ export default function Page(){
           </div>
         </section>
 
+        {/* Sticky CTA */}
         <div className="lead-sticky">
           <LeadStickyBar/>
         </div>
@@ -124,6 +133,20 @@ export default function Page(){
           </div>
         </section>
 
+        {/* CARROSSEL (10 imagens locais) */}
+        <ManualCarousel
+          ariaLabel="Veja nosso dia a dia"
+          images={[
+            "/galeria/1.jpg","/galeria/2.jpg","/galeria/3.jpg","/galeria/4.jpg","/galeria/5.jpg",
+            "/galeria/6.jpg","/galeria/7.jpg","/galeria/8.jpg","/galeria/9.jpg","/galeria/10.jpg"
+          ]}
+          height={380}
+          heightMobile={250}
+          fit="contain"   // “contain” para ver a foto inteira. Troque para "cover" se quiser preencher.
+        />
+
+        
+
         {/* METODO */}
         <section id="metodo" style={{ background:"var(--bg-soft)" }}>
           <div className="container">
@@ -146,6 +169,27 @@ export default function Page(){
             <div className="cta-strip hoverable reveal" style={{ marginTop:"1rem" }}>
               <strong>Quer ver de perto?</strong>
               <a href="#visita" className="btn btn-primary" data-confetti>Agendar visita guiada</a>
+            </div>
+          </div>
+        </section>
+
+        {/* DEPOIMENTOS */}
+        <section id="depoimentos" style={{ background:"var(--bg-soft)" }}>
+          <div className="container">
+            <h3 className="section-title" data-bullet-target>O que os pais dizem</h3>
+            <div className="testi-grid">
+              <figure className="testi-card hoverable reveal">
+                <blockquote>“A Cirandinha transformou a rotina do meu filho. Voltou pra casa mais confiante e independente.”</blockquote>
+                <figcaption>— Ana, mãe do Pedro (5 anos)</figcaption>
+              </figure>
+              <figure className="testi-card hoverable reveal">
+                <blockquote>“Equipe acolhedora de verdade. A parceria com a família faz toda a diferença.”</blockquote>
+                <figcaption>— Bruno, pai da Laura (4 anos)</figcaption>
+              </figure>
+              <figure className="testi-card hoverable reveal">
+                <blockquote>“Ambiente seguro e cheio de descobertas. Recomendo sem pensar duas vezes.”</blockquote>
+                <figcaption>— Camila, mãe do Theo (3 anos)</figcaption>
+              </figure>
             </div>
           </div>
         </section>
@@ -176,9 +220,9 @@ export default function Page(){
         {/* CONTATO */}
         <section id="contato">
           <div className="container">
-            <h3 className="section-title" data-bullet-target>Receba a tabela + proposta (PDF)</h3>
+            <h3 className="section-title reveal" data-bullet-target>Receba o guia (PDF)</h3>
             <div className="card hoverable reveal">
-              <form onSubmit={(e)=>{ e.preventDefault(); alert("Obrigado! Enviamos a tabela e a proposta para seu e-mail/WhatsApp."); }}>
+              <form onSubmit={(e)=>{ e.preventDefault(); alert("Obrigado! Enviaremos o guia e a proposta por WhatsApp/e-mail."); }}>
                 <div className="form-row">
                   <label>Nome do responsável
                     <input required name="nome" placeholder="Seu nome completo"/>
@@ -197,16 +241,21 @@ export default function Page(){
                     </select>
                   </label>
                 </div>
-                <label className="block">Mensagem (opcional)
-                  <textarea rows={4} placeholder="Horários preferidos, dúvidas, quando quer visitar..."></textarea>
-                </label>
+                <div className="form-row">
+                  <label>Preferência de contato
+                    <select name="preferencia">
+                      <option>WhatsApp</option><option>Ligação</option><option>E-mail</option>
+                    </select>
+                  </label>
+                </div>
                 <label className="consent">
-                  <input type="checkbox" defaultChecked/> Enviar por WhatsApp e e-mail a tabela + proposta (PDF)
+                  <input type="checkbox" defaultChecked aria-label="Autoriza envio por WhatsApp e e-mail"/>
+                  <span>Enviar por WhatsApp e e-mail o guia da escola (PDF)</span>
                 </label>
                 <div className="cta" style={{marginTop:".8rem"}}>
-                  <button className="btn btn-primary hoverable" data-confetti>Receber PDF</button>
+                  <button className="btn btn-primary hoverable" data-confetti>Receber guia</button>
                   <a className="btn btn-ghost hoverable" target="_blank" rel="noopener"
-                    href="https://wa.me/553100000000?text=Olá!%20Quero%20receber%20a%20tabela%20e%20agendar%20uma%20visita.">
+                    href="https://wa.me/553100000000?text=Olá!%20Quero%20receber%20o%20guia%20e%20agendar%20uma%20visita.">
                     Falar no WhatsApp
                   </a>
                 </div>
@@ -221,7 +270,14 @@ export default function Page(){
         <div className="container footer-grid">
           <div className="brand-inv">
             <div style={{display:"flex",alignItems:"center",gap:".75rem"}}>
-              <Image src="/logo.jpg" alt="Logo Cirandinha" width={44} height={44} style={{ borderRadius: "10px" }}/>
+              <Image
+                src="/logo.jpg"
+                alt="Logo Cirandinha"
+                width={44}
+                height={44}
+                /* evita warning do Next/Image quando CSS altera uma dimensão */
+                style={{ borderRadius: 10, height: "auto", width: "auto" }}
+              />
               <div><strong>Centro de Educação Infantil Cirandinha</strong><br/><small>Maternal ao 2º período • Contagem/MG</small></div>
             </div>
             <p className="legal">© 2025 Cirandinha. Todos os direitos reservados.</p>
@@ -232,8 +288,7 @@ export default function Page(){
         </div>
       </footer>
 
-      {/* Se você usa o widget, mantenha; senão remova o import e esta linha */}
-      {typeof WhatsAppWidget === "function" ? <WhatsAppWidget/> : null}
+      <WhatsAppWidget/>
     </>
   );
 }
