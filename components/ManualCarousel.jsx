@@ -10,24 +10,22 @@ export default function ManualCarousel({
   heightMobile = 240,
   ariaLabel = "Galeria de fotos",
 }) {
-  const [idx, setIdx] = useState(0);           
+  const [idx, setIdx] = useState(0);
   const [hovering, setHovering] = useState(false);
   const wrapRef = useRef(null);
   const trackRef = useRef(null);
   const canvasRef = useRef(null);
   const timerRef = useRef(null);
-  const slideWRef = useRef(0);                 
-
+  const slideWRef = useRef(0);
   const perView = useCardsPerView();
   const H = useMemo(
     () => (typeof window !== "undefined" && window.innerWidth <= 900 ? heightMobile : heightDesktop),
     [heightDesktop, heightMobile]
   );
-
-  const windowSize = useMemo(() => perView + 4 /* buffer vizinhos */, [perView]);
+  const windowSize = useMemo(() => perView + 2, [perView]);
   const visible = useMemo(() => {
     if (!images.length) return [];
-    const base = idx % images.length;
+    const base = mod(idx, images.length);
     const res = [];
     for (let i = -Math.floor(windowSize / 2); i < Math.ceil(windowSize / 2); i++) {
       const logical = base + i;
@@ -51,7 +49,6 @@ export default function ManualCarousel({
   }, [hovering, interval, next, images.length]);
   useEffect(() => { start(); return () => clearInterval(timerRef.current); }, [start]);
 
-  // ====== Canvas de fundo 
   useEffect(() => {
     const c = canvasRef.current, p = wrapRef.current; if (!c || !p) return;
     const ctx = c.getContext("2d");
@@ -60,9 +57,6 @@ export default function ManualCarousel({
       const g = ctx.createLinearGradient(0, 0, W, Hc);
       g.addColorStop(0, "#ffffff"); g.addColorStop(1, "#f7fbff");
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, Hc);
-      const glow = ctx.createRadialGradient(W * .5, Hc * .4, 10, W * .5, Hc * .4, Math.max(W, Hc));
-      glow.addColorStop(0, "#a5f3fc33"); glow.addColorStop(1, "transparent");
-      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, Hc);
     };
     const resize = () => {
       W = p.clientWidth; Hc = H; DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -74,7 +68,7 @@ export default function ManualCarousel({
     return () => ro.disconnect();
   }, [H]);
 
-  // ====== Drag/Swipe
+  // drag/swipe
   const drag = useRef({ on: false, lastX: 0, vx: 0 });
   useEffect(() => {
     const el = wrapRef.current; if (!el) return;
@@ -143,14 +137,14 @@ export default function ManualCarousel({
                 >
                   <figure className="mc-card mc-polaroid">
                     <div className="mc-media">
-                      {/* priority apenas nos primeiros itens visíveis */}
                       <Image
                         src={images[real]}
                         alt={`Foto ${real + 1}`}
                         fill
                         sizes="(max-width: 900px) 100vw, 33vw"
                         style={{ objectFit: "cover" }}
-                        priority={Math.abs(logical) < perView}
+                        loading="lazy"
+                        priority={false}
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                           e.currentTarget.parentElement?.classList?.add?.("is-fallback");
@@ -172,7 +166,6 @@ export default function ManualCarousel({
           <button className="mc-nav mc-next" aria-label="Próximo" onClick={next}>›</button>
         </div>
 
-        {/* Dots  */}
         <div className="mc-dots" role="tablist" aria-label="Posição do carrossel">
           {images.map((_, i) => {
             const isActive = (idx % images.length + images.length) % images.length === i;
@@ -195,13 +188,12 @@ export default function ManualCarousel({
   );
 }
 
-/* ===== helpers ===== */
 function useCardsPerView() {
   const [n, setN] = useState(3);
   useEffect(() => {
     const calc = () => setN(window.innerWidth <= 900 ? 1 : window.innerWidth <= 1200 ? 2 : 3);
     calc();
-    window.addEventListener("resize", calc);
+    window.addEventListener("resize", calc, { passive: true });
     return () => window.removeEventListener("resize", calc);
   }, []);
   return n;

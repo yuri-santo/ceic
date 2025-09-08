@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import CircularMascotNav from "../components/CircularMascotNav";
 import LeadStickyBar from "../components/LeadStickyBar";
 import EffectsClient from "../components/EffectsClient";
-import WhatsAppWidget from "../components/WhatsAppWidget";
-import ManualCarousel from "../components/ManualCarousel";
-import KidsCalendar from "../components/KidsCalendar";
 
-// ícone pequeno para bullets/itens
+const ManualCarousel = dynamic(() => import("../components/ManualCarousel"), { ssr: false, loading: () => <div style={{height:360}} /> });
+const KidsCalendar   = dynamic(() => import("../components/KidsCalendar"), { ssr: false });
+const WhatsAppWidget = dynamic(() => import("../components/WhatsAppWidget"), { ssr: false });
 const IconCheck = (p) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
     <path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.5z" />
@@ -19,10 +19,8 @@ const IconCheck = (p) => (
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // imagens da galeria
   const imagens = Array.from({ length: 10 }, (_, i) => `/galeria/${i + 1}.jpg`);
 
-  // eventos do calendário (exemplo)
   const eventos = {
     "2025-09-10": [{ title: "Aula de Música", color: "#7c3aed" }],
     "2025-09-12": [
@@ -38,7 +36,6 @@ export default function HomePage() {
       <EffectsClient />
       <CircularMascotNav />
 
-      {/* HEADER */}
       <header className="hoverable">
         <div className="container nav">
           <div className="brand">
@@ -48,6 +45,8 @@ export default function HomePage() {
               width={44}
               height={44}
               style={{ borderRadius: 12, height: "auto", width: "auto" }}
+              loading="eager"
+              priority
             />
             <div>
               <h1>Centro de Educação Infantil Cirandinha</h1>
@@ -55,7 +54,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* menu desktop */}
           <nav className="primary" aria-label="Principal">
             <ul role="list">
               <li><a href="#sobre" className="hoverable">Sobre</a></li>
@@ -65,7 +63,6 @@ export default function HomePage() {
             </ul>
           </nav>
 
-          {/* telefone (mobile) + burger */}
           <div className="top-phone">
             <a href="tel:+553100000000">Ligar: (31) 0000-0000</a>
           </div>
@@ -78,7 +75,6 @@ export default function HomePage() {
           </button>
         </div>
 
-        {/* menu mobile */}
         <nav className={`mobileMenu ${menuOpen ? "open" : ""}`} aria-label="Menu mobile">
           <div className="container">
             <a href="#sobre" onClick={() => setMenuOpen(false)}>Sobre</a>
@@ -90,7 +86,6 @@ export default function HomePage() {
       </header>
 
       <main>
-        {/* HERO */}
         <section id="inicio" className="hero">
           <div className="container hero-inner">
             <div>
@@ -116,19 +111,17 @@ export default function HomePage() {
                   src="/camisa.jpg"
                   alt="Crianças com camisa da escola"
                   fill
-                  priority
                   sizes="(max-width: 900px) 100vw, 40vw"
                   style={{ objectFit: "cover", borderRadius: "18px" }}
+                  loading="lazy"
                 />
               </div>
             </div>
           </div>
         </section>
 
-        {/* Sticky CTA */}
         <div className="lead-sticky"><LeadStickyBar /></div>
 
-        {/* SOBRE */}
         <section id="sobre">
           <div className="container">
             <h3 className="section-title" data-bullet-target>Por que o Cirandinha?</h3>
@@ -155,16 +148,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* GALERIA (com carrossel otimizado) */}
         <section className="mc-section alt">
           <div className="container">
             <h2 className="section-title">Nossa Galeria</h2>
-            {/* interval mais curto, mas sem travar graças à virtualização */}
             <ManualCarousel images={imagens} interval={2500} />
           </div>
         </section>
 
-        {/* CALENDÁRIO */}
         <section className="section section-calendar">
           <div className="container">
             <h2 className="section-title">Calendário da Escola</h2>
@@ -172,7 +162,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* METODO */}
         <section id="metodo" style={{ background:"var(--bg-soft)" }}>
           <div className="container">
             <h3 className="section-title" data-bullet-target>Metodologia que vira rotina feliz</h3>
@@ -189,7 +178,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ESTRUTURA */}
         <section id="estrutura">
           <div className="container">
             <h3 className="section-title" data-bullet-target>Estrutura para cuidar e desenvolver</h3>
@@ -201,7 +189,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* VISITA */}
         <section id="visita" style={{ background:"var(--bg-soft)"}}>
           <div className="container">
             <h3 className="section-title" data-bullet-target>Agende uma visita guiada</h3>
@@ -212,7 +199,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* CONTATO */}
         <section id="contato">
           <div className="container">
             <h3 className="section-title reveal" data-bullet-target>Receba o guia (PDF)</h3>
@@ -254,7 +240,6 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* FOOTER */}
       <footer>
         <div className="container footer-grid">
           <div className="brand-inv">
@@ -265,6 +250,7 @@ export default function HomePage() {
                 width={44}
                 height={44}
                 style={{ borderRadius: 10, height: "auto", width: "auto" }}
+                loading="lazy"
               />
               <div><strong>Centro de Educação Infantil Cirandinha</strong><br/><small>Maternal ao 2º período • Contagem/MG</small></div>
             </div>

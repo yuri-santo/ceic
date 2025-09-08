@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
+  output: "standalone",
   images: {
-    // usando imagens locais em /public/galeria, não precisa de domains
     formats: ["image/avif", "image/webp"],
   },
   experimental: {
-    // mantém App Router confortável
     typedRoutes: false,
   },
 };
