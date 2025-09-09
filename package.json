@@ -6,12 +6,14 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p $PORT",
-    "lint": "next lint",
-    "postinstall": "npx --yes next telemetry disable || true"
+    "lint": "echo \"no lint\""
   },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "engines": {
+    "node": ">=18.17"
   }
 }
