@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import CircularMascotNav from "../components/CircularMascotNav";
@@ -18,48 +17,10 @@ const IconCheck = (p) => (
 );
 
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const headerRef = useRef(null);
-
-  // encolhe o header ao rolar e marca item ativo
-  useEffect(() => {
-    const links = Array.from(document.querySelectorAll('nav.primary a'));
-    const sections = [
-      { id: "sobre" }, { id: "metodo" }, { id: "estrutura" }, { id: "contato" }
-    ];
-
-    const onScroll = () => {
-      const scrolled = window.scrollY > 4;
-      headerRef.current?.classList.toggle("scrolled", scrolled);
-
-      // ativa pill do item conforme seção visível
-      const y = window.scrollY + 120;
-      let active = null;
-      for (const s of sections) {
-        const el = document.getElementById(s.id);
-        if (!el) continue;
-        const top = el.offsetTop;
-        if (y >= top) active = s.id;
-      }
-      links.forEach(a => {
-        const href = a.getAttribute("href") || "";
-        a.classList.toggle("is-active", href === `#${active}`);
-      });
-    };
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   const imagens = Array.from({ length: 10 }, (_, i) => `/galeria/${i + 1}.jpg`);
-
   const eventos = {
     "2025-09-10": [{ title: "Aula de Música", color: "#7c3aed" }],
-    "2025-09-12": [
-      { title: "Dia do Brinquedo", color: "#f59e0b" },
-      { title: "Comemoração Set", color: "#10b981" },
-    ],
+    "2025-09-12": [{ title: "Dia do Brinquedo", color: "#f59e0b" }, { title: "Comemoração Set", color: "#10b981" }],
     "2025-09-22": [{ title: "Reunião Pais", color: "#ef4444" }],
     "2025-09-30": [{ title: "Passeio ao Parque", color: "#06b6d4" }],
   };
@@ -69,18 +30,10 @@ export default function HomePage() {
       <EffectsClient />
       <CircularMascotNav />
 
-      <header ref={headerRef} className="hoverable">
+      <header className="hoverable">
         <div className="container nav">
           <div className="brand">
-            <Image
-              src="/logo.jpg"
-              alt="Logo Centro de Educação Infantil Cirandinha"
-              width={36}
-              height={36}
-              style={{ borderRadius: 10, height: "auto", width: "auto" }}
-              loading="eager"
-              priority
-            />
+            <Image src="/logo.jpg" alt="Logo Centro de Educação Infantil Cirandinha" width={44} height={44} style={{ borderRadius: 12 }} priority />
             <div>
               <h1>Centro de Educação Infantil Cirandinha</h1>
               <small>45 anos guiando pelo melhor caminho</small>
@@ -96,25 +49,19 @@ export default function HomePage() {
             </ul>
           </nav>
 
-          <div className="top-phone">
-            <a href="tel:+553100000000">Ligar: (31) 0000-0000</a>
-          </div>
-
-          <button
-            className="burger"
-            aria-label="Abrir menu"
-            onClick={() => setMenuOpen((s) => !s)}
-          >
-            <span />
-          </button>
+          <div className="top-phone"><a href="tel:+553100000000">Ligar: (31) 0000-0000</a></div>
+          <button className="burger" aria-label="Abrir menu" onClick={()=>{
+            const m = document.querySelector(".mobileMenu");
+            m?.classList.toggle("open");
+          }}><span /></button>
         </div>
 
-        <nav className={`mobileMenu ${menuOpen ? "open" : ""}`} aria-label="Menu mobile">
+        <nav className="mobileMenu" aria-label="Menu mobile">
           <div className="container">
-            <a href="#sobre" onClick={() => setMenuOpen(false)}>Sobre</a>
-            <a href="#metodo" onClick={() => setMenuOpen(false)}>Metodologia</a>
-            <a href="#estrutura" onClick={() => setMenuOpen(false)}>Estrutura</a>
-            <a href="#contato" onClick={() => setMenuOpen(false)}>Matrículas</a>
+            <a href="#sobre">Sobre</a>
+            <a href="#metodo">Metodologia</a>
+            <a href="#estrutura">Estrutura</a>
+            <a href="#contato">Matrículas</a>
           </div>
         </nav>
       </header>
@@ -274,27 +221,57 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer>
-        <div className="container footer-grid">
-          <div className="brand-inv">
-            <div style={{display:"flex",alignItems:"center",gap:".75rem"}}>
+      <footer style={{ padding: "12px 0", borderTop: "1px solid #eaeaea" }}>
+        <div
+          className="container footer-grid"
+          style={{
+            display: "flex",            // força layout compacto (sobrepõe grid do CSS)
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            rowGap: 8,
+            flexWrap: "wrap"
+          }}
+        >
+          {/* Marca (compacta) */}
+          <div className="brand-inv" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <Image
                 src="/logo.jpg"
                 alt="Logo Cirandinha"
-                width={36}
-                height={36}
-                style={{ borderRadius: 10, height: "auto", width: "auto" }}
+                width={44}
+                height={44}
+                style={{ borderRadius: 8, width: "44px", height: "44px" }}
                 loading="lazy"
               />
-              <div><strong>Centro de Educação Infantil Cirandinha</strong><br/><small>Maternal ao 2º período • Contagem/MG</small></div>
+              <div style={{ lineHeight: 1.15 }}>
+                <strong style={{ fontSize: ".95rem" }}>
+                  Centro de Educação Infantil Cirandinha
+                </strong>
+                <br />
+                <small style={{ fontSize: ".8rem", opacity: 0.95 }}>
+                  Maternal ao 2º período • Contagem/MG
+                </small>
+              </div>
             </div>
-            <p className="legal">© 2025 Cirandinha. Todos os direitos reservados.</p>
+
+            {/* Copyright enxuto */}
+            <p className="legal" style={{ margin: "4px 0 0", lineHeight: 1.2 }}>
+              © {new Date().getFullYear()} Cirandinha. Todos os direitos reservados.
+            </p>
           </div>
+
+          {/* Contato (sem margem extra) */}
           <div>
-            <p><a href="mailto:contato@cirandinha.com">contato@cirandinha.com</a><br/>WhatsApp: (31) 00000-0000</p>
+            <p style={{ margin: 0, lineHeight: 1.3 }}>
+              <a href="mailto:contato@cirandinha.com">contato@cirandinha.com</a>
+              <br />
+              WhatsApp: (31) 00000-0000
+            </p>
           </div>
         </div>
       </footer>
+
 
       <WhatsAppWidget />
     </>
