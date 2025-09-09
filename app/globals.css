@@ -22,19 +22,49 @@ a{color:inherit;text-decoration:none}
 
 .container{width:min(1100px,92%);margin:0 auto}
 
-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(0,0,0,.06)}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:12px;flex-wrap:nowrap}
+/* ====== HEADER/NAV ====== */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(8px);
+  box-shadow:0 1px 0 rgba(0,0,0,.06);
+  transition:padding .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;gap:16px;flex-wrap:nowrap
+}
 .brand{display:flex;align-items:center;gap:.75rem;min-width:0;flex:1 1 auto}
-.brand img{width:44px;height:44px;border-radius:12px;flex:0 0 auto}
-.brand h1{font-size:1rem;line-height:1.1;margin:0;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
-.brand small{display:block;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand img{width:36px;height:36px;border-radius:10px;flex:0 0 auto;transition:transform .18s ease}
+.brand h1{
+  font-size:.95rem;line-height:1.1;margin:0;font-weight:900;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)
+}
+.brand small{
+  display:block;font-weight:600;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.8rem
+}
+
+/* compacta quando rolar */
+header.scrolled{ background:rgba(255,255,255,.98); box-shadow:0 6px 22px rgba(0,0,0,.08) }
+header.scrolled .nav{ padding:6px 0 }
+header.scrolled .brand img{ transform:scale(.94) }
 
 nav.primary{display:flex;align-items:center}
-nav.primary ul{display:flex;list-style:none;gap:.25rem;padding:0;margin:0}
-nav.primary a{display:block;padding:10px 12px;border-radius:12px;font-weight:800}
-nav.primary a:hover{background:rgba(242,140,44,.12)}
+nav.primary ul{display:flex;list-style:none;gap:.35rem;padding:0;margin:0}
+nav.primary a{
+  display:block;padding:10px 14px;border-radius:999px;font-weight:800;
+  line-height:1; border:1px solid transparent;
+  transition:background .15s ease, border-color .15s ease, color .15s ease
+}
+nav.primary a:hover{background:rgba(242,140,44,.12);border-color:rgba(242,140,44,.25)}
+nav.primary a.is-active{background:rgba(242,140,44,.18);border-color:rgba(242,140,44,.35)}
+nav.primary a:focus-visible{outline:3px solid rgba(242,140,44,.4);outline-offset:2px;border-radius:12px}
 
-.burger{display:none;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;flex:0 0 auto}
+.burger{
+  display:none;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;flex:0 0 auto
+}
 .burger span,.burger span::before,.burger span::after{content:"";display:block;width:18px;height:2px;background:#0f172a;border-radius:2px;position:relative}
 .burger span::before{position:absolute;top:-6px}
 .burger span::after{position:absolute;top:6px}
@@ -48,6 +78,7 @@ nav.primary a:hover{background:rgba(242,140,44,.12)}
 .mobileMenu a:hover{background:rgba(242,140,44,.08)}
 nav.primary a:focus-visible,.mobileMenu a:focus-visible,.btn:focus-visible{outline:3px solid rgba(242,140,44,.4);outline-offset:2px;border-radius:12px}
 
+/* ====== HERO E GERAL ====== */
 .hero{position:relative;overflow:hidden;min-height:460px}
 .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center;padding:56px 0 36px}
 .hero-inner>div:first-child{min-width:0}
@@ -112,6 +143,7 @@ footer a:hover{border-bottom-color:rgba(255,255,255,.6)}
 .inline-ico{width:18px;height:18px;vertical-align:-3px;margin-right:6px;flex:0 0 auto}
 svg{display:inline-block;max-width:100%;height:auto}
 
+/* ====== Mascot circular (sem alterações funcionais) ====== */
 .circSideNav{ position:fixed;left:12px;top:50%;transform:translateY(-50%);z-index:60 }
 .circSideNav .panel{background:rgba(255,255,255,.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.7);border-radius:22px;padding:14px;box-shadow:0 14px 34px rgba(0,0,0,.12)}
 .circSideNav .ring{ position:relative; width:220px; height:220px }
@@ -146,6 +178,7 @@ svg{display:inline-block;max-width:100%;height:auto}
 
 .mc-section { padding-top: 6px; }
 
+/* ====== CAROUSEL / CALENDAR – sem alterações ====== */
 .mc-carousel{
   position:relative; overflow:hidden; border-radius:22px;
   background: radial-gradient(140% 120% at 60% 0%, #ffffff 0%, #f8fbff 60%, #f5faff 100%);
@@ -283,6 +316,7 @@ svg{display:inline-block;max-width:100%;height:auto}
 
 .section .section-title + * { margin-top: 8px; }
 
+/* ====== RESPONSIVO ====== */
 @media (max-width: 900px){
   .nav{flex-wrap:wrap}
   nav.primary{display:none}

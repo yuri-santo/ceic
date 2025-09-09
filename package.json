@@ -5,16 +5,13 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "node .next/standalone/server.js",
-    "lint": "echo \"no lint\""
+    "start": "next start -p $PORT",
+    "lint": "next lint",
+    "postinstall": "npx --yes next telemetry disable || true"
   },
   "dependencies": {
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "sharp": "^0.33.5"
-  },
-  "engines": {
-    "node": ">=18.17"
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
   }
 }

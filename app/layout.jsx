@@ -1,5 +1,4 @@
 import "./globals.css";
-import Script from "next/script";
 
 export const metadata = {
   title: "Centro de Educação Infantil Cirandinha — Aprender Brincando",
@@ -13,7 +12,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body >{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

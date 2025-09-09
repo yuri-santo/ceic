@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import CircularMascotNav from "../components/CircularMascotNav";
@@ -10,6 +10,7 @@ import EffectsClient from "../components/EffectsClient";
 const ManualCarousel = dynamic(() => import("../components/ManualCarousel"), { ssr: false, loading: () => <div style={{height:360}} /> });
 const KidsCalendar   = dynamic(() => import("../components/KidsCalendar"), { ssr: false });
 const WhatsAppWidget = dynamic(() => import("../components/WhatsAppWidget"), { ssr: false });
+
 const IconCheck = (p) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
     <path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.5z" />
@@ -18,6 +19,38 @@ const IconCheck = (p) => (
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef(null);
+
+  // encolhe o header ao rolar e marca item ativo
+  useEffect(() => {
+    const links = Array.from(document.querySelectorAll('nav.primary a'));
+    const sections = [
+      { id: "sobre" }, { id: "metodo" }, { id: "estrutura" }, { id: "contato" }
+    ];
+
+    const onScroll = () => {
+      const scrolled = window.scrollY > 4;
+      headerRef.current?.classList.toggle("scrolled", scrolled);
+
+      // ativa pill do item conforme seção visível
+      const y = window.scrollY + 120;
+      let active = null;
+      for (const s of sections) {
+        const el = document.getElementById(s.id);
+        if (!el) continue;
+        const top = el.offsetTop;
+        if (y >= top) active = s.id;
+      }
+      links.forEach(a => {
+        const href = a.getAttribute("href") || "";
+        a.classList.toggle("is-active", href === `#${active}`);
+      });
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const imagens = Array.from({ length: 10 }, (_, i) => `/galeria/${i + 1}.jpg`);
 
@@ -36,15 +69,15 @@ export default function HomePage() {
       <EffectsClient />
       <CircularMascotNav />
 
-      <header className="hoverable">
+      <header ref={headerRef} className="hoverable">
         <div className="container nav">
           <div className="brand">
             <Image
               src="/logo.jpg"
               alt="Logo Centro de Educação Infantil Cirandinha"
-              width={44}
-              height={44}
-              style={{ borderRadius: 12, height: "auto", width: "auto" }}
+              width={36}
+              height={36}
+              style={{ borderRadius: 10, height: "auto", width: "auto" }}
               loading="eager"
               priority
             />
@@ -66,6 +99,7 @@ export default function HomePage() {
           <div className="top-phone">
             <a href="tel:+553100000000">Ligar: (31) 0000-0000</a>
           </div>
+
           <button
             className="burger"
             aria-label="Abrir menu"
@@ -247,8 +281,8 @@ export default function HomePage() {
               <Image
                 src="/logo.jpg"
                 alt="Logo Cirandinha"
-                width={44}
-                height={44}
+                width={36}
+                height={36}
                 style={{ borderRadius: 10, height: "auto", width: "auto" }}
                 loading="lazy"
               />
